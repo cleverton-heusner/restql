@@ -241,4 +241,48 @@ public class FieldsSelectorTest {
         // Assert
         assertThat(actualSelectedFields).containsExactlyInAnyOrderEntriesOf(expectedSelectedFields);
     }
+
+    @Test
+    void when_oneChildFieldOfListTypeSelected_then_oneChildFieldOfListTypeReturned() {
+
+        // Arrange
+        final var expectedSelectedPostFields = Map.of("comments", post.getComments());
+
+        // Act
+        final var actualSelectedFields = fieldsSelector.from(post).select("comments");
+
+        // Assert
+        assertThat(actualSelectedFields).containsExactlyInAnyOrderEntriesOf(expectedSelectedPostFields);
+    }
+
+    @Test
+    void when_oneLeafFieldInsideListSelected_then_fieldReturned() {
+
+        // Arrange
+        final List<Map<String, Long>> commentsIds = post.getComments().stream()
+                .map(comment -> Map.of("id", comment.getId()))
+                .toList();
+        final var expectedSelectedPostFields = Map.of("comments", commentsIds);
+
+        // Act
+        final var actualSelectedFields = fieldsSelector.from(post).select("comments.id");
+
+        // Assert
+        assertThat(actualSelectedFields).containsExactlyInAnyOrderEntriesOf(expectedSelectedPostFields);
+    }
+
+    void when_multipleLeafFieldsInsideListSelected_then_fieldsReturned() {
+
+        // Arrange
+        final List<Map<String, Long>> commentsIds = post.getComments().stream()
+                .map(comment -> Map.of("id", comment.getId()))
+                .toList();
+        final var expectedSelectedPostFields = Map.of("comments", commentsIds);
+
+        // Act
+        final var actualSelectedFields = fieldsSelector.from(post).select("comments.id", "comments.text");
+
+        // Assert
+        assertThat(actualSelectedFields).containsExactlyInAnyOrderEntriesOf(expectedSelectedPostFields);
+    }
 }
