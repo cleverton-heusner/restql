@@ -3,6 +3,7 @@ import org.instancio.Instancio;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -171,6 +172,70 @@ public class FieldsSelectorTest {
                 "author.email",
                 "author.pet.age",
                 "author.pet.name"
+        );
+
+        // Assert
+        assertThat(actualSelectedFields).containsExactlyInAnyOrderEntriesOf(expectedSelectedFields);
+    }
+
+    @Test
+    void when_fieldsSelectedFromList_then_fieldsReturned() {
+
+        // Arrange
+        final var author = post.getAuthor();
+        final var pet = post.getAuthor().getPet();
+        final var expectedPetSelectedFields = Map.of("name", pet.getName(), "age", pet.getAge());
+        final var expectedAuthorSelectedFields = Map.of(
+                "id", author.getId(),
+                "email", author.getEmail(),
+                "pet", expectedPetSelectedFields
+        );
+
+        final var expectedSelectedFields = Map.of(
+                "id", post.getId(),
+                "text", post.getText(),
+                "author", expectedAuthorSelectedFields
+        );
+
+        // Act
+        final var actualSelectedFields = fieldsSelector.from(post).select(
+                List.of(
+                        "id",
+                        "text",
+                        "author.id",
+                        "author.email",
+                        "author.pet.age",
+                        "author.pet.name"
+                )
+        );
+
+        // Assert
+        assertThat(actualSelectedFields).containsExactlyInAnyOrderEntriesOf(expectedSelectedFields);
+    }
+
+    @Test
+    void when_fieldsSeparatedByCommaSelected_then_fieldsReturned() {
+
+        // Arrange
+        final var author = post.getAuthor();
+        final var pet = post.getAuthor().getPet();
+        final var expectedPetSelectedFields = Map.of("name", pet.getName(), "age", pet.getAge());
+        final var expectedAuthorSelectedFields = Map.of(
+                "id", author.getId(),
+                "email", author.getEmail(),
+                "pet", expectedPetSelectedFields
+        );
+
+        final var expectedSelectedFields = Map.of(
+                "id", post.getId(),
+                "text", post.getText(),
+                "author", expectedAuthorSelectedFields
+        );
+
+        // Act
+
+        final var actualSelectedFields = fieldsSelector.from(post).select(
+                "id,text,author.id,author.email,author.pet.age,author.pet.name"
         );
 
         // Assert

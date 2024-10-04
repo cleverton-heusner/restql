@@ -6,6 +6,7 @@ import java.util.Map;
 
 public class FieldsSelector {
 
+    private static final String COMMA = ",";
     private static final String DOT = "\\.";
     private Object rootField;
 
@@ -16,6 +17,14 @@ public class FieldsSelector {
 
     public Map<String, Object> select(final String...fields) {
         return selectedFields(Arrays.asList(fields), new HashMap<>());
+    }
+
+    public Map<String, Object> select(final List<String> fields) {
+        return selectedFields(fields, new HashMap<>());
+    }
+
+    public Map<String, Object> select(final String fieldsSeparatedByComma) {
+        return selectedFields(Arrays.asList(fieldsSeparatedByComma.split(COMMA)), new HashMap<>());
     }
 
     private Map<String, Object> selectedFields(final List<String> fields,
