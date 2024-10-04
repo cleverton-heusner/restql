@@ -19,7 +19,7 @@ public class FieldsSelectorTest {
     }
 
     @Test
-    void when_oneFieldSelected_then_oneFieldReturned() {
+    void when_oneLeafChildFieldSelected_then_oneLeafChildFieldReturned() {
 
         // Arrange
         final var expectedSelectedPostFields = Map.of("id", post.getId());
@@ -32,7 +32,7 @@ public class FieldsSelectorTest {
     }
 
     @Test
-    void when_moreThanOneFieldSelected_then_moreThanOneFieldReturned() {
+    void when_multipleLeafChildFieldsSelected_then_multipleLeafChildFieldsReturned() {
 
         // Arrange
         final var expectedSelectedPostFields = Map.of("id", post.getId(),
@@ -48,7 +48,21 @@ public class FieldsSelectorTest {
     }
 
     @Test
-    void when_oneChildFieldSelected_then_oneChildFieldReturned() {
+    void when_oneChildWithDescendantsFieldSelected_then_oneChildWithDescendantsFieldReturned() {
+
+        // Arrange
+        final var author = post.getAuthor();
+        final var expectedSelectedFields = Map.of("author", author);
+
+        // Act
+        final var actualSelectedFields = fieldsSelector.from(post).select("author");
+
+        // Assert
+        assertThat(actualSelectedFields).containsExactlyInAnyOrderEntriesOf(expectedSelectedFields);
+    }
+
+    @Test
+    void when_oneLeafDescendantFieldSelected_then_oneLeafDescendantFieldReturned() {
 
         // Arrange
         final var expectedSelectedFields = Map.of(
@@ -63,7 +77,7 @@ public class FieldsSelectorTest {
     }
 
     @Test
-    void when_moreThanOneChildFieldSelected_then_moreThanOneChildFieldReturned() {
+    void when_multipleLeafDescendantFieldsSelected_then_multipleLeafDescendantFieldsReturned() {
 
         // Arrange
         final var expectedSelectedFields = Map.of(
@@ -97,7 +111,7 @@ public class FieldsSelectorTest {
     }
 
     @Test
-    void when_moreThanOneDescendantFieldSelected_then_moreThanOneDescendantFieldReturned() {
+    void when_multipleDescendantFieldsSelected_then_multipleOneDescendantFieldsReturned() {
 
         // Arrange
         final var pet = post.getAuthor().getPet();
@@ -115,7 +129,7 @@ public class FieldsSelectorTest {
     }
 
     @Test
-    void when_oneChildFieldAndOneDescendantFieldSelected_then_oneChildFieldAndOneDescendantFieldReturned() {
+    void when_oneLeafChildFieldAndOneLeafDescendantFieldSelected_then_oneLeafChildFieldAndOneLeafDescendantFieldReturned() {
 
         // Arrange
         final var expectedSelectedFields = Map.of(
@@ -131,7 +145,7 @@ public class FieldsSelectorTest {
     }
 
     @Test
-    void when_moreThanOneChildFieldAndMoreThanOneDescendantFieldSelected_then_moreThanOneChildFieldAndMoreThanOneDescendantFieldReturned() {
+    void when_fieldsWithMultipleHierarchicalLevelsSelected_then_fieldsWithMultipleHierarchicalLevelsReturned() {
 
         // Arrange
         final var author = post.getAuthor();
