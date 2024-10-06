@@ -13,19 +13,19 @@ public class FieldsSelector {
     }
 
     public Map<String, Object> select(final String...fields) {
-        return selectedFields(Arrays.asList(fields), new HashMap<>());
+        return selectFields(Arrays.asList(fields), new HashMap<>());
     }
 
     public Map<String, Object> select(final List<String> fields) {
-        return selectedFields(fields, new HashMap<>());
+        return selectFields(fields, new HashMap<>());
     }
 
     public Map<String, Object> select(final String fieldsSeparatedByComma) {
-        return selectedFields(Arrays.asList(fieldsSeparatedByComma.split(COMMA)), new HashMap<>());
+        return selectFields(Arrays.asList(fieldsSeparatedByComma.split(COMMA)), new HashMap<>());
     }
 
-    private Map<String, Object> selectedFields(final List<String> fields,
-                                               final Map<String, Object> previousSelectedSubfields) {
+    private Map<String, Object> selectFields(final List<String> fields,
+                                             final Map<String, Object> previousSelectedSubfields) {
 
         final var currentSelectedSubfields = selectSubfields(extractSubfields(fields), rootField);
         final List<String> remainingFields = removeFirst(fields);
@@ -43,7 +43,7 @@ public class FieldsSelector {
                                                final List<String> remainingFields) {
         return remainingFields.isEmpty() ?
                 selectedSubfields :
-                selectedFields(remainingFields, selectedSubfields);
+                selectFields(remainingFields, selectedSubfields);
     }
 
     private List<String> extractSubfields(final List<String> fields) {
@@ -66,13 +66,13 @@ public class FieldsSelector {
         } catch (final IllegalAccessException e) {
             throw new RuntimeException(e);
         }
-
     }
 
     private Object inferField(final Object firstField, final List<String> remainingSubfields) {
-        return remainingSubfields.isEmpty() ?
-                firstField :
-                selectSubfields(remainingSubfields, firstField);
+        if (remainingSubfields.isEmpty())
+            return firstField;
+
+        return selectSubfields(remainingSubfields, firstField);
     }
 
     private Field retrieveFirstFieldMetadata(final Object field, final List<String> subFields) {
@@ -94,9 +94,9 @@ public class FieldsSelector {
     }
 
     private List<Object> selectSubfieldsInCollection(final Object field, final List<String> subFields) {
-        return ((Collection<?>) field).stream()
+        return new ArrayList<>(((Collection<?>) field).stream()
                 .map(f -> selectSubfields(subFields, f))
-                .toList();
+                .toList());
     }
 
     private Object retrieveFirstItemFromCollection(final Object collection) {

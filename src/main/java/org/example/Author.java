@@ -1,14 +1,19 @@
 package org.example;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Author {
 
     private long id;
     private String name;
     private String email;
     private Pet pet;
+    private List<String> phoneNumbers;
 
     public Author() {
         pet = new Pet();
+        phoneNumbers = new ArrayList<>();
     }
 
     public long getId() {
@@ -41,5 +46,13 @@ public class Author {
 
     public void setPet(Pet pet) {
         this.pet = pet;
+    }
+
+    public List<String> getPhoneNumbers() {
+        return phoneNumbers;
+    }
+
+    public void setPhoneNumbers(List<String> phoneNumbers) {
+        this.phoneNumbers = phoneNumbers;
     }
 }

@@ -56,4 +56,15 @@ public class Comment {
     public void setReplies(List<Comment> replies) {
         this.replies = replies;
     }
+
+    @Override
+    public String toString() {
+        return "Comment{" +
+                "id=" + id +
+                ", text='" + text + '\'' +
+                ", datePublished=" + datePublished +
+                ", author=" + author +
+                ", replies=" + replies +
+                '}';
+    }
 }
