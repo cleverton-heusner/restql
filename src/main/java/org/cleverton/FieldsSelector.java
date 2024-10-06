@@ -1,3 +1,5 @@
+package org.cleverton;
+
 import java.lang.reflect.Field;
 import java.util.*;
 
@@ -61,7 +63,7 @@ public class FieldsSelector {
             final List<String> remainingSubfields = removeFirst(subFields);
 
             return new HashMap<>() {{
-                put(firstFieldMetadata.getName(), inferField(firstField, remainingSubfields));
+                put(retrieveFieldName(firstFieldMetadata), inferField(firstField, remainingSubfields));
             }};
         } catch (final IllegalAccessException e) {
             throw new RuntimeException(e);
@@ -80,13 +82,23 @@ public class FieldsSelector {
             return retrieveFirstFieldMetadata(retrieveFirstItemFromCollection(field), subFields);
         }
 
-        try {
-            final Field firstFieldMetadata = field.getClass().getDeclaredField(subFields.getFirst());
-            firstFieldMetadata.setAccessible(true);
-            return firstFieldMetadata;
-        } catch (final NoSuchFieldException e) {
-            throw new RuntimeException(e);
-        }
+        return Arrays.stream(field.getClass().getDeclaredFields())
+                .filter(f -> {
+                    final var serializationAnnotation = SerializationAnnotationSelector.select(f);
+                    return serializationAnnotation.isPresent() &&
+                            serializationAnnotation.get().getValue().equals(subFields.getFirst());
+                })
+                .peek(f -> f.setAccessible(true))
+                .findFirst()
+                .orElseGet(() -> {
+                    try {
+                        final Field fieldMetadata = field.getClass().getDeclaredField(subFields.getFirst());
+                        fieldMetadata.setAccessible(true);
+                        return fieldMetadata;
+                    } catch (NoSuchFieldException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
     }
 
     private boolean isCollection(final Object field) {
@@ -105,5 +117,11 @@ public class FieldsSelector {
 
     private List<String> removeFirst(final List<String> list) {
         return list.subList(1, list.size());
+    }
+
+    private String retrieveFieldName(final Field fieldMetadata) {
+        return SerializationAnnotationSelector.select(fieldMetadata)
+                .map(SerializationAnnotation::getValue)
+                .orElse(fieldMetadata.getName());
     }
 }

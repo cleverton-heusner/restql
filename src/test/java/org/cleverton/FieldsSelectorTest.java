@@ -1,5 +1,7 @@
-import org.example.Comment;
-import org.example.Post;
+package org.cleverton;
+
+import org.cleverton.fixture.Comment;
+import org.cleverton.fixture.Post;
 import org.instancio.Instancio;
 import org.instancio.Select;
 import org.junit.jupiter.api.BeforeEach;
@@ -489,5 +491,33 @@ public class FieldsSelectorTest {
 
         // Assert
         assertThat(actualSelectedFields).containsExactlyInAnyOrderEntriesOf(expectedSelectedPostFields);
+    }
+
+    @Test
+    void when_fieldNameSelectedPresentInJacksonAnnotation_then_fieldReturned() {
+
+        // Arrange
+        final var authorNickName = Map.of("nick_name", post.getAuthor().getNickName());
+        final var expectedSelectedFields = Map.of("author", authorNickName);
+
+        // Act
+        final var actualSelectedFields = fieldsSelector.from(post).select("author.nick_name");
+
+        // Assert
+        assertThat(actualSelectedFields).containsExactlyInAnyOrderEntriesOf(expectedSelectedFields);
+    }
+
+    @Test
+    void when_fieldNameSelectedPresentInGsonAnnotation_then_fieldReturned() {
+
+        // Arrange
+        final var petNickName = Map.of("nick_name", post.getAuthor().getPet().getNickName());
+        final var expectedSelectedFields = Map.of("author", Map.of("pet", petNickName));
+
+        // Act
+        final var actualSelectedFields = fieldsSelector.from(post).select("author.pet.nick_name");
+
+        // Assert
+        assertThat(actualSelectedFields).containsExactlyInAnyOrderEntriesOf(expectedSelectedFields);
     }
 }

@@ -1,4 +1,6 @@
-package org.example;
+package org.cleverton.fixture;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,6 +10,10 @@ public class Author {
     private long id;
     private String name;
     private String email;
+
+    @JsonProperty("nick_name")
+    private String nickName;
+
     private Pet pet;
     private List<String> phoneNumbers;
 
@@ -38,6 +44,14 @@ public class Author {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getNickName() {
+        return nickName;
+    }
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
     }
 
     public Pet getPet() {
