@@ -1,4 +1,4 @@
-package org.cleverton;
+package org.cleverton.utils;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -1,4 +1,4 @@
-package org.cleverton;
+package org.cleverton.serialization;
 
 import com.google.gson.annotations.SerializedName;
 

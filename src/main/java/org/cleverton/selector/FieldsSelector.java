@@ -1,4 +1,8 @@
-package org.cleverton;
+package org.cleverton.selector;
+
+import org.cleverton.serialization.SerializationAnnotation;
+import org.cleverton.serialization.SerializationAnnotationSelector;
+import org.cleverton.utils.MapsMerger;
 
 import java.lang.reflect.Field;
 import java.util.*;

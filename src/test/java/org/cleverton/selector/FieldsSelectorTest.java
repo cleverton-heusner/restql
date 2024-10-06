@@ -1,4 +1,4 @@
-package org.cleverton;
+package org.cleverton.selector;
 
 import org.cleverton.fixture.Comment;
 import org.cleverton.fixture.Post;
