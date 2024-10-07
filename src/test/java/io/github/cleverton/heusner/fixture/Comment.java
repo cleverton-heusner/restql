@@ -1,23 +1,20 @@
-package org.cleverton.fixture;
+package io.github.cleverton.heusner.fixture;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class Post {
+public class Comment {
 
     private long id;
-    private String title;
     private String text;
     private Date datePublished;
-    private long views;
-    private long likes;
     private Author author;
-    private List<Comment> comments;
+    private List<Comment> replies;
 
-    public Post() {
+    public Comment() {
         author = new Author();
-        comments = new ArrayList<>();
+        replies = new ArrayList<>();
     }
 
     public long getId() {
@@ -26,14 +23,6 @@ public class Post {
 
     public void setId(long id) {
         this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
     }
 
     public String getText() {
@@ -52,22 +41,6 @@ public class Post {
         this.datePublished = datePublished;
     }
 
-    public long getViews() {
-        return views;
-    }
-
-    public void setViews(long views) {
-        this.views = views;
-    }
-
-    public long getLikes() {
-        return likes;
-    }
-
-    public void setLikes(long likes) {
-        this.likes = likes;
-    }
-
     public Author getAuthor() {
         return author;
     }
@@ -76,11 +49,22 @@ public class Post {
         this.author = author;
     }
 
-    public List<Comment> getComments() {
-        return comments;
+    public List<Comment> getReplies() {
+        return replies;
     }
 
-    public void setComments(List<Comment> comments) {
-        this.comments = comments;
+    public void setReplies(List<Comment> replies) {
+        this.replies = replies;
+    }
+
+    @Override
+    public String toString() {
+        return "Comment{" +
+                "id=" + id +
+                ", text='" + text + '\'' +
+                ", datePublished=" + datePublished +
+                ", author=" + author +
+                ", replies=" + replies +
+                '}';
     }
 }

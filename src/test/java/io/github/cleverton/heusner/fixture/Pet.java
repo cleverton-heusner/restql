@@ -1,4 +1,4 @@
-package org.cleverton.fixture;
+package io.github.cleverton.heusner.fixture;
 
 import com.google.gson.annotations.SerializedName;
 

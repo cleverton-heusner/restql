@@ -1,7 +1,7 @@
-package org.cleverton.selector;
+package io.github.cleverton.heusner.selector;
 
-import org.cleverton.fixture.Comment;
-import org.cleverton.fixture.Post;
+import io.github.cleverton.heusner.fixture.Comment;
+import io.github.cleverton.heusner.fixture.Post;
 import org.instancio.Instancio;
 import org.instancio.Select;
 import org.junit.jupiter.api.BeforeEach;

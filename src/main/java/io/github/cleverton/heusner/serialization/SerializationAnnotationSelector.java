@@ -1,4 +1,4 @@
-package org.cleverton.serialization;
+package io.github.cleverton.heusner.serialization;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.annotations.SerializedName;

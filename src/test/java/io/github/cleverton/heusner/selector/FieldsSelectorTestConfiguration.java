@@ -1,4 +1,4 @@
-package org.cleverton.selector;
+package io.github.cleverton.heusner.selector;
 
 public class FieldsSelectorTestConfiguration {
 

@@ -1,4 +1,4 @@
-package org.cleverton.utils;
+package io.github.cleverton.heusner.utils;
 
 import java.util.ArrayList;
 import java.util.HashMap;

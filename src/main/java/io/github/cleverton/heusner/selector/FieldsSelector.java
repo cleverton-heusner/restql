@@ -1,8 +1,8 @@
-package org.cleverton.selector;
+package io.github.cleverton.heusner.selector;
 
-import org.cleverton.serialization.SerializationAnnotation;
-import org.cleverton.serialization.SerializationAnnotationSelector;
-import org.cleverton.utils.MapsMerger;
+import io.github.cleverton.heusner.serialization.SerializationAnnotation;
+import io.github.cleverton.heusner.serialization.SerializationAnnotationSelector;
+import io.github.cleverton.heusner.utils.MapsMerger;
 
 import java.lang.reflect.Field;
 import java.util.*;
