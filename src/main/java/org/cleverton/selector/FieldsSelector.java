@@ -27,7 +27,11 @@ public class FieldsSelector {
     }
 
     public Map<String, Object> select(final String fieldsSeparatedByComma) {
-        return selectFields(Arrays.asList(fieldsSeparatedByComma.split(COMMA)), new HashMap<>());
+        final List<String> fields = Arrays.stream(fieldsSeparatedByComma.split(COMMA))
+                .map(String::trim)
+                .toList();
+
+        return selectFields(fields, new HashMap<>());
     }
 
     private Map<String, Object> selectFields(final List<String> fields,

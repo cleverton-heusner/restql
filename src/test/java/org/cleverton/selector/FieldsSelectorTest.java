@@ -243,6 +243,34 @@ public class FieldsSelectorTest extends FieldsSelectorTestConfiguration  {
     }
 
     @Test
+    void when_fieldsSeparatedByCommaAndWithBlankSpacesSelected_then_fieldsReturned() {
+
+        // Arrange
+        final var author = post.getAuthor();
+        final var pet = post.getAuthor().getPet();
+        final var expectedPetSelectedFields = Map.of(NAME, pet.getName(), AGE, pet.getAge());
+        final var expectedAuthorSelectedFields = Map.of(
+                ID, author.getId(),
+                EMAIL, author.getEmail(),
+                PET, expectedPetSelectedFields
+        );
+
+        final var expectedSelectedFields = Map.of(
+                ID, post.getId(),
+                TEXT, post.getText(),
+                AUTHOR, expectedAuthorSelectedFields
+        );
+
+        // Act
+        final var actualSelectedFields = fieldsSelector.from(post).select(
+                " id , text , author.id , author.email , author.pet.age , author.pet.name "
+        );
+
+        // Assert
+        assertThat(actualSelectedFields).containsExactlyInAnyOrderEntriesOf(expectedSelectedFields);
+    }
+
+    @Test
     void when_nullFieldSelected_then_fieldsReturned() {
 
         // Arrange
