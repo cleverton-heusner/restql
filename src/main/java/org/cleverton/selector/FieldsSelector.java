@@ -103,8 +103,8 @@ public class FieldsSelector {
                         final Field fieldMetadata = field.getClass().getDeclaredField(subFields.getFirst());
                         fieldMetadata.setAccessible(true);
                         return fieldMetadata;
-                    } catch (NoSuchFieldException e) {
-                        throw new RuntimeException(e);
+                    } catch (final NoSuchFieldException e) {
+                        throw new IllegalArgumentException("Field '" + subFields.getFirst() + "' not found.");
                     }
                 });
     }

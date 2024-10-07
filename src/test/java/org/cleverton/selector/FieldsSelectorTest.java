@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class FieldsSelectorTest extends FieldsSelectorTestConfiguration  {
 
@@ -574,5 +575,36 @@ public class FieldsSelectorTest extends FieldsSelectorTestConfiguration  {
 
         // Assert
         assertThat(actualSelectedFields).containsExactlyInAnyOrderEntriesOf(expectedSelectedFields);
+    }
+
+    @Test
+    void when_nonExistingFieldsSelected_then_illegalArgumentExceptionReturned() {
+
+        // Act
+        final var illegalArgumentException = assertThrows(IllegalArgumentException.class, () -> {
+            fieldsSelector.from(post).select(
+                    "nonExistingField1",
+                    "nonExistingField2",
+                    "nonExistingField2"
+            );
+        });
+
+        // Assert
+        assertThat(illegalArgumentException.getMessage()).isEqualTo("Field 'nonExistingField1' not found.");
+    }
+
+    @Test
+    void when_nonExistingSubfieldsSelected_then_illegalArgumentExceptionReturned() {
+
+        // Act
+        final var illegalArgumentException = assertThrows(IllegalArgumentException.class, () -> {
+            fieldsSelector.from(post).select(
+                    "author.nonExistingField1",
+                    "author.nonExistingField2"
+            );
+        });
+
+        // Assert
+        assertThat(illegalArgumentException.getMessage()).isEqualTo("Field 'nonExistingField1' not found.");
     }
 }
