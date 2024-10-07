@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class FieldsSelectorTest {
+public class FieldsSelectorTest extends FieldsSelectorTestConfiguration  {
 
     private FieldsSelector fieldsSelector;
     private Post post;
@@ -31,10 +31,10 @@ public class FieldsSelectorTest {
     void when_oneLeafChildFieldSelected_then_fieldReturned() {
 
         // Arrange
-        final var expectedSelectedPostFields = Map.of("id", post.getId());
+        final var expectedSelectedPostFields = Map.of(ID, post.getId());
 
         // Act
-        final var actualSelectedFields = fieldsSelector.from(post).select("id");
+        final var actualSelectedFields = fieldsSelector.from(post).select(ID);
 
         // Assert
         assertThat(actualSelectedFields).containsExactlyInAnyOrderEntriesOf(expectedSelectedPostFields);
@@ -44,13 +44,13 @@ public class FieldsSelectorTest {
     void when_multipleLeafChildFieldsSelected_then_fieldsReturned() {
 
         // Arrange
-        final var expectedSelectedPostFields = Map.of("id", post.getId(),
-                "text", post.getText(),
-                "datePublished", post.getDatePublished()
+        final var expectedSelectedPostFields = Map.of(ID, post.getId(),
+                TEXT, post.getText(),
+                DATE_PUBLISHED, post.getDatePublished()
         );
 
         // Act
-        final var actualSelectedFields = fieldsSelector.from(post).select("id", "text", "datePublished");
+        final var actualSelectedFields = fieldsSelector.from(post).select(ID, TEXT, DATE_PUBLISHED);
 
         // Assert
         assertThat(actualSelectedFields).containsExactlyInAnyOrderEntriesOf(expectedSelectedPostFields);
@@ -61,10 +61,10 @@ public class FieldsSelectorTest {
 
         // Arrange
         final var author = post.getAuthor();
-        final var expectedSelectedFields = Map.of("author", author);
+        final var expectedSelectedFields = Map.of(AUTHOR, author);
 
         // Act
-        final var actualSelectedFields = fieldsSelector.from(post).select("author");
+        final var actualSelectedFields = fieldsSelector.from(post).select(AUTHOR);
 
         // Assert
         assertThat(actualSelectedFields).containsExactlyInAnyOrderEntriesOf(expectedSelectedFields);
@@ -74,8 +74,8 @@ public class FieldsSelectorTest {
     void when_oneLeafDescendantFieldSelected_then_fieldReturned() {
 
         // Arrange
-        final var authorId = Map.of("id", post.getAuthor().getId());
-        final var expectedSelectedFields = Map.of("author", authorId);
+        final var authorId = Map.of(ID, post.getAuthor().getId());
+        final var expectedSelectedFields = Map.of(AUTHOR, authorId);
 
         // Act
         final var actualSelectedFields = fieldsSelector.from(post).select("author.id");
@@ -88,8 +88,8 @@ public class FieldsSelectorTest {
     void when_multipleLeafDescendantFieldsSelected_then_fieldsReturned() {
 
         // Arrange
-        final var author = Map.of("id", post.getAuthor().getId(), "email", post.getAuthor().getEmail());
-        final var expectedSelectedFields = Map.of("author", author);
+        final var author = Map.of(ID, post.getAuthor().getId(), EMAIL, post.getAuthor().getEmail());
+        final var expectedSelectedFields = Map.of(AUTHOR, author);
 
         // Act
         final var actualSelectedFields = fieldsSelector.from(post).select("author.id", "author.email");
@@ -102,8 +102,8 @@ public class FieldsSelectorTest {
     void when_oneDescendantFieldSelected_then_fieldReturned() {
 
         // Arrange
-        final var authorAge = Map.of("age", post.getAuthor().getPet().getAge());
-        final var expectedSelectedFields = Map.of("author", Map.of("pet", authorAge));
+        final var authorAge = Map.of(AGE, post.getAuthor().getPet().getAge());
+        final var expectedSelectedFields = Map.of(AUTHOR, Map.of(PET, authorAge));
 
         // Act
         final var actualSelectedFields = fieldsSelector.from(post).select("author.pet.age");
@@ -117,8 +117,8 @@ public class FieldsSelectorTest {
 
         // Arrange
         final var pet = post.getAuthor().getPet();
-        final var expectedSelectedPetFields = Map.of("name", pet.getName(), "age", pet.getAge());
-        final var expectedSelectedFields = Map.of("author", Map.of("pet", expectedSelectedPetFields));
+        final var expectedSelectedPetFields = Map.of(NAME, pet.getName(), AGE, pet.getAge());
+        final var expectedSelectedFields = Map.of(AUTHOR, Map.of(PET, expectedSelectedPetFields));
 
         // Act
         final var actualSelectedFields = fieldsSelector.from(post).select(
@@ -135,12 +135,12 @@ public class FieldsSelectorTest {
 
         // Arrange
         final var expectedSelectedFields = Map.of(
-                "id", post.getId(),
-                "author", Map.of("id", post.getAuthor().getId())
+                ID, post.getId(),
+                AUTHOR, Map.of(ID, post.getAuthor().getId())
         );
 
         // Act
-        final var actualSelectedFields = fieldsSelector.from(post).select("id", "author.id");
+        final var actualSelectedFields = fieldsSelector.from(post).select(ID, "author.id");
 
         // Assert
         assertThat(actualSelectedFields).containsExactlyInAnyOrderEntriesOf(expectedSelectedFields);
@@ -152,23 +152,23 @@ public class FieldsSelectorTest {
         // Arrange
         final var author = post.getAuthor();
         final var pet = post.getAuthor().getPet();
-        final var expectedPetSelectedFields = Map.of("name", pet.getName(), "age", pet.getAge());
+        final var expectedPetSelectedFields = Map.of(NAME, pet.getName(), AGE, pet.getAge());
         final var expectedAuthorSelectedFields = Map.of(
-                "id", author.getId(),
-                "email", author.getEmail(),
-                "pet", expectedPetSelectedFields
+                ID, author.getId(),
+                EMAIL, author.getEmail(),
+                PET, expectedPetSelectedFields
         );
 
         final var expectedSelectedFields = Map.of(
-                "id", post.getId(),
-                "text", post.getText(),
-                "author", expectedAuthorSelectedFields
+                ID, post.getId(),
+                TEXT, post.getText(),
+                AUTHOR, expectedAuthorSelectedFields
         );
 
         // Act
         final var actualSelectedFields = fieldsSelector.from(post).select(
-                "id",
-                "text",
+                ID,
+                TEXT,
                 "author.id",
                 "author.email",
                 "author.pet.age",
@@ -185,24 +185,24 @@ public class FieldsSelectorTest {
         // Arrange
         final var author = post.getAuthor();
         final var pet = post.getAuthor().getPet();
-        final var expectedPetSelectedFields = Map.of("name", pet.getName(), "age", pet.getAge());
+        final var expectedPetSelectedFields = Map.of(NAME, pet.getName(), AGE, pet.getAge());
         final var expectedAuthorSelectedFields = Map.of(
-                "id", author.getId(),
-                "email", author.getEmail(),
-                "pet", expectedPetSelectedFields
+                ID, author.getId(),
+                EMAIL, author.getEmail(),
+                PET, expectedPetSelectedFields
         );
 
         final var expectedSelectedFields = Map.of(
-                "id", post.getId(),
-                "text", post.getText(),
-                "author", expectedAuthorSelectedFields
+                ID, post.getId(),
+                TEXT, post.getText(),
+                AUTHOR, expectedAuthorSelectedFields
         );
 
         // Act
         final var actualSelectedFields = fieldsSelector.from(post).select(
                 List.of(
-                        "id",
-                        "text",
+                        ID,
+                        TEXT,
                         "author.id",
                         "author.email",
                         "author.pet.age",
@@ -220,17 +220,17 @@ public class FieldsSelectorTest {
         // Arrange
         final var author = post.getAuthor();
         final var pet = post.getAuthor().getPet();
-        final var expectedPetSelectedFields = Map.of("name", pet.getName(), "age", pet.getAge());
+        final var expectedPetSelectedFields = Map.of(NAME, pet.getName(), AGE, pet.getAge());
         final var expectedAuthorSelectedFields = Map.of(
-                "id", author.getId(),
-                "email", author.getEmail(),
-                "pet", expectedPetSelectedFields
+                ID, author.getId(),
+                EMAIL, author.getEmail(),
+                PET, expectedPetSelectedFields
         );
 
         final var expectedSelectedFields = Map.of(
-                "id", post.getId(),
-                "text", post.getText(),
-                "author", expectedAuthorSelectedFields
+                ID, post.getId(),
+                TEXT, post.getText(),
+                AUTHOR, expectedAuthorSelectedFields
         );
 
         // Act
@@ -248,18 +248,18 @@ public class FieldsSelectorTest {
 
         // Arrange
         final var postWithNullField = Instancio.of(Post.class)
-                .set(Select.field("text"), null)
+                .set(Select.field(TEXT), null)
                 .create();
         final Map<String, Object> expectedSelectedPostFields = new HashMap<>();
-        expectedSelectedPostFields.put("id", postWithNullField.getId());
-        expectedSelectedPostFields.put("text", postWithNullField.getText());
-        expectedSelectedPostFields.put("datePublished", postWithNullField.getDatePublished());
+        expectedSelectedPostFields.put(ID, postWithNullField.getId());
+        expectedSelectedPostFields.put(TEXT, postWithNullField.getText());
+        expectedSelectedPostFields.put(DATE_PUBLISHED, postWithNullField.getDatePublished());
 
         // Act
         final var actualSelectedFields = fieldsSelector.from(postWithNullField).select(
-                "id",
-                "text",
-                "datePublished"
+                ID,
+                TEXT,
+                DATE_PUBLISHED
         );
 
         // Assert
@@ -271,18 +271,18 @@ public class FieldsSelectorTest {
 
         // Arrange
         final var postWithEmptyField = Instancio.of(Post.class)
-                .set(Select.field("text"), "")
+                .set(Select.field(TEXT), "")
                 .create();
         final Map<String, Object> expectedSelectedPostFields = new HashMap<>();
-        expectedSelectedPostFields.put("id", postWithEmptyField.getId());
-        expectedSelectedPostFields.put("text", postWithEmptyField.getText());
-        expectedSelectedPostFields.put("datePublished", postWithEmptyField.getDatePublished());
+        expectedSelectedPostFields.put(ID, postWithEmptyField.getId());
+        expectedSelectedPostFields.put(TEXT, postWithEmptyField.getText());
+        expectedSelectedPostFields.put(DATE_PUBLISHED, postWithEmptyField.getDatePublished());
 
         // Act
         final var actualSelectedFields = fieldsSelector.from(postWithEmptyField).select(
-                "id",
-                "text",
-                "datePublished"
+                ID,
+                TEXT,
+                DATE_PUBLISHED
         );
 
         // Assert
@@ -293,10 +293,10 @@ public class FieldsSelectorTest {
     void when_oneChildFieldOfListTypeSelected_then_fieldReturned() {
 
         // Arrange
-        final var expectedSelectedPostFields = Map.of("comments", post.getComments());
+        final var expectedSelectedPostFields = Map.of(COMMENTS, post.getComments());
 
         // Act
-        final var actualSelectedFields = fieldsSelector.from(post).select("comments");
+        final var actualSelectedFields = fieldsSelector.from(post).select(COMMENTS);
 
         // Assert
         assertThat(actualSelectedFields).containsExactlyInAnyOrderEntriesOf(expectedSelectedPostFields);
@@ -306,11 +306,8 @@ public class FieldsSelectorTest {
     void when_oneChildFieldAsListWithJavaTypeSelected_then_fieldReturned() {
 
         // Arrange
-        final var expectedSelectedAuthorPhoneNumbersFields = Map.of(
-                "phoneNumbers",
-                post.getAuthor().getPhoneNumbers()
-        );
-        final var expectedSelectedPostFields = Map.of("author", expectedSelectedAuthorPhoneNumbersFields);
+        final var expectedSelectedAuthorPhoneNumbersFields = Map.of(PHONE_NUMBERS, post.getAuthor().getPhoneNumbers());
+        final var expectedSelectedPostFields = Map.of(AUTHOR, expectedSelectedAuthorPhoneNumbersFields);
 
         // Act
         final var actualSelectedFields = fieldsSelector.from(post).select("author.phoneNumbers");
@@ -324,9 +321,9 @@ public class FieldsSelectorTest {
 
         // Arrange
         final List<Map<String, Long>> commentsIds = post.getComments().stream()
-                .map(comment -> Map.of("id", comment.getId()))
+                .map(comment -> Map.of(ID, comment.getId()))
                 .toList();
-        final var expectedSelectedPostFields = Map.of("comments", commentsIds);
+        final var expectedSelectedPostFields = Map.of(COMMENTS, commentsIds);
 
         // Act
         final var actualSelectedFields = fieldsSelector.from(post).select("comments.id");
@@ -340,9 +337,9 @@ public class FieldsSelectorTest {
 
         // Arrange
         var comments = (List<?>) post.getComments().stream()
-                .map(comment -> Map.of("id", comment.getId(), "text", comment.getText()))
+                .map(comment -> Map.of(ID, comment.getId(), TEXT, comment.getText()))
                 .toList();
-        final var expectedSelectedPostFields = Map.of("comments", comments);
+        final var expectedSelectedPostFields = Map.of(COMMENTS, comments);
 
         // Act
         final var actualSelectedFields = fieldsSelector.from(post).select("comments.id", "comments.text");
@@ -357,13 +354,13 @@ public class FieldsSelectorTest {
         // Arrange
         var comments = (List<?>) post.getComments().stream()
                 .map(comment -> Map.of(
-                        "author",
+                        AUTHOR,
                         Map.of(
-                                "id",
+                                ID,
                                 comment.getAuthor().getId()
                         )
                 )).toList();
-        final var expectedSelectedPostFields = Map.of("comments", comments);
+        final var expectedSelectedPostFields = Map.of(COMMENTS, comments);
 
         // Act
         final var actualSelectedFields = fieldsSelector.from(post).select("comments.author.id");
@@ -378,15 +375,15 @@ public class FieldsSelectorTest {
         // Arrange
         var comments = (List<?>) post.getComments().stream()
                 .map(comment -> Map.of(
-                        "author",
+                        AUTHOR,
                         Map.of(
-                                "id",
+                                ID,
                                 comment.getAuthor().getId(),
-                                "name",
+                                NAME,
                                 comment.getAuthor().getName()
                         )
                 )).toList();
-        final var expectedSelectedPostFields = Map.of("comments", comments);
+        final var expectedSelectedPostFields = Map.of(COMMENTS, comments);
 
         // Act
         final var actualSelectedFields = fieldsSelector.from(post).select(
@@ -404,17 +401,17 @@ public class FieldsSelectorTest {
         // Arrange
         var comments = (List<?>) post.getComments().stream()
                 .map(comment -> Map.of(
-                        "id", comment.getId(),
-                        "text", comment.getText(),
-                        "author",
+                        ID, comment.getId(),
+                        TEXT, comment.getText(),
+                        AUTHOR,
                         Map.of(
-                                "id",
+                                ID,
                                 comment.getAuthor().getId(),
-                                "name",
+                                NAME,
                                 comment.getAuthor().getName()
                         )
                 )).toList();
-        final var expectedSelectedPostFields = Map.of("comments", comments);
+        final var expectedSelectedPostFields = Map.of(COMMENTS, comments);
 
         // Act
         final var actualSelectedFields = fieldsSelector.from(post).select(
@@ -436,11 +433,11 @@ public class FieldsSelectorTest {
         final var actualSelectedFields = fieldsSelector.from(post).select("comments.replies");
 
         // Assert
-        final List<?> actualComments = (List<?>) actualSelectedFields.get("comments");
+        final List<?> actualComments = (List<?>) actualSelectedFields.get(COMMENTS);
         assertThat(actualComments).hasSize(post.getComments().size());
 
         for (int i = 0; i < actualComments.size(); i++) {
-            final List<?> actualReplies = (List<?>) ((Map<String, Object>) actualComments.get(i)).get("replies");
+            final List<?> actualReplies = (List<?>) ((Map<String, Object>) actualComments.get(i)).get(REPLIES);
             assertThat(actualReplies).hasSize(post.getComments().get(i).getReplies().size());
 
             for (int j = 0; j < actualReplies.size(); j++) {
@@ -455,12 +452,12 @@ public class FieldsSelectorTest {
     void when_leafFieldsSelectedInNestedLists_then_fieldsReturned() {
 
         var expectedSelectedPostFields = Map.of(
-                "comments", post.getComments().stream()
+                COMMENTS, post.getComments().stream()
                         .map(comment -> Map.of(
-                        "replies", comment.getReplies().stream()
+                        REPLIES, comment.getReplies().stream()
                                         .map(reply -> Map.of(
-                                                "id", reply.getId(),
-                                                "text", reply.getText()
+                                                ID, reply.getId(),
+                                                TEXT, reply.getText()
                         )).collect(Collectors.toList())
                 )).collect(Collectors.toList())
         );
@@ -480,14 +477,31 @@ public class FieldsSelectorTest {
 
         // Arrange
         final var postWithEmptyField = Instancio.of(Post.class)
-                .set(Select.field("comments"), null)
+                .set(Select.field(COMMENTS), null)
                 .create();
         final Map<String, Object> expectedSelectedPostFields = new HashMap<>();
-        expectedSelectedPostFields.put("id", postWithEmptyField.getId());
-        expectedSelectedPostFields.put("comments", null);
+        expectedSelectedPostFields.put(ID, postWithEmptyField.getId());
+        expectedSelectedPostFields.put(COMMENTS, null);
 
         // Act
-        final var actualSelectedFields = fieldsSelector.from(postWithEmptyField).select("id", "comments");
+        final var actualSelectedFields = fieldsSelector.from(postWithEmptyField).select(ID, COMMENTS);
+
+        // Assert
+        assertThat(actualSelectedFields).containsExactlyInAnyOrderEntriesOf(expectedSelectedPostFields);
+    }
+
+    @Test
+    void when_listWithDuplicatedField_then_fieldsReturned() {
+
+        // Arrange
+        final var postWithCommentDuplicated = Instancio.create(Post.class);
+        postWithCommentDuplicated.getComments().add(postWithCommentDuplicated.getComments().getFirst());
+        final var expectedSelectedPostFields = Map.of(COMMENTS, postWithCommentDuplicated.getComments());
+
+        // Act
+        final var actualSelectedFields = fieldsSelector.from(postWithCommentDuplicated).select(
+                COMMENTS
+        );
 
         // Assert
         assertThat(actualSelectedFields).containsExactlyInAnyOrderEntriesOf(expectedSelectedPostFields);
@@ -497,8 +511,8 @@ public class FieldsSelectorTest {
     void when_fieldNameSelectedPresentInJacksonAnnotation_then_fieldReturned() {
 
         // Arrange
-        final var authorNickName = Map.of("nick_name", post.getAuthor().getNickName());
-        final var expectedSelectedFields = Map.of("author", authorNickName);
+        final var authorNickName = Map.of(NICK_NAME, post.getAuthor().getNickName());
+        final var expectedSelectedFields = Map.of(AUTHOR, authorNickName);
 
         // Act
         final var actualSelectedFields = fieldsSelector.from(post).select("author.nick_name");
@@ -511,8 +525,8 @@ public class FieldsSelectorTest {
     void when_fieldNameSelectedPresentInGsonAnnotation_then_fieldReturned() {
 
         // Arrange
-        final var petNickName = Map.of("nick_name", post.getAuthor().getPet().getNickName());
-        final var expectedSelectedFields = Map.of("author", Map.of("pet", petNickName));
+        final var petNickName = Map.of(NICK_NAME, post.getAuthor().getPet().getNickName());
+        final var expectedSelectedFields = Map.of(AUTHOR, Map.of(PET, petNickName));
 
         // Act
         final var actualSelectedFields = fieldsSelector.from(post).select("author.pet.nick_name");
