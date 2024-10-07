@@ -9,6 +9,8 @@ import java.util.*;
 
 public class FieldsSelector {
 
+    public static final String FIELDS = "fields";
+
     private static final String COMMA = ",";
     private static final String DOT = "\\.";
     private Object rootField;
