@@ -234,7 +234,6 @@ public class FieldsSelectorTest extends FieldsSelectorTestConfiguration  {
         );
 
         // Act
-
         final var actualSelectedFields = fieldsSelector.from(post).select(
                 "id,text,author.id,author.email,author.pet.age,author.pet.name"
         );
@@ -297,6 +296,20 @@ public class FieldsSelectorTest extends FieldsSelectorTestConfiguration  {
 
         // Act
         final var actualSelectedFields = fieldsSelector.from(post).select(COMMENTS);
+
+        // Assert
+        assertThat(actualSelectedFields).containsExactlyInAnyOrderEntriesOf(expectedSelectedPostFields);
+    }
+
+    @Test
+    void when_oneChildFieldOfSetTypeSelected_then_fieldReturned() {
+
+        // Arrange
+        final var authorBooks = Map.of("books", post.getAuthor().getBooks());
+        final var expectedSelectedPostFields = Map.of("author", authorBooks);
+
+        // Act
+        final var actualSelectedFields = fieldsSelector.from(post).select("author.books");
 
         // Assert
         assertThat(actualSelectedFields).containsExactlyInAnyOrderEntriesOf(expectedSelectedPostFields);

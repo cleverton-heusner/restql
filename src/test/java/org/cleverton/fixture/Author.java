@@ -3,7 +3,9 @@ package org.cleverton.fixture;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Author {
 
@@ -16,10 +18,12 @@ public class Author {
 
     private Pet pet;
     private List<String> phoneNumbers;
+    private Set<String> books;
 
     public Author() {
         pet = new Pet();
         phoneNumbers = new ArrayList<>();
+        books = new HashSet<>();
     }
 
     public long getId() {
@@ -68,5 +72,13 @@ public class Author {
 
     public void setPhoneNumbers(List<String> phoneNumbers) {
         this.phoneNumbers = phoneNumbers;
+    }
+
+    public Set<String> getBooks() {
+        return books;
+    }
+
+    public void setBooks(Set<String> books) {
+        this.books = books;
     }
 }
