@@ -7,7 +7,7 @@ import io.github.cleverton.heusner.utils.MapsMerger;
 import java.lang.reflect.Field;
 import java.util.*;
 
-public class FieldsSelector {
+public class RestQlQuery {
 
     public static final String FIELDS = "fields";
 
@@ -15,7 +15,7 @@ public class FieldsSelector {
     private static final String DOT = "\\.";
     private Object rootField;
 
-    public FieldsSelector from(final Object entity) {
+    public RestQlQuery from(final Object entity) {
         this.rootField = entity;
         return this;
     }
