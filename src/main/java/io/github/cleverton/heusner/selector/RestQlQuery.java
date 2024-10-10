@@ -14,26 +14,28 @@ public class RestQlQuery {
     private static final String COMMA = ",";
     private static final String DOT = "\\.";
     private Object rootField;
+    private List<String> fields;
 
-    public RestQlQuery from(final Object entity) {
+    public Map<String, Object> from(final Object entity) {
         this.rootField = entity;
+        return selectFields(fields, new HashMap<>());
+    }
+
+    public RestQlQuery select(final String...fields) {
+        this.fields = Arrays.asList(fields);
         return this;
     }
 
-    public Map<String, Object> select(final String...fields) {
-        return selectFields(Arrays.asList(fields), new HashMap<>());
+    public RestQlQuery select(final List<String> fields) {
+        this.fields = fields;
+        return this;
     }
 
-    public Map<String, Object> select(final List<String> fields) {
-        return selectFields(fields, new HashMap<>());
-    }
-
-    public Map<String, Object> select(final String fieldsSeparatedByComma) {
-        final List<String> fields = Arrays.stream(fieldsSeparatedByComma.split(COMMA))
+    public RestQlQuery select(final String fieldsSeparatedByComma) {
+        fields = Arrays.stream(fieldsSeparatedByComma.split(COMMA))
                 .map(String::trim)
                 .toList();
-
-        return selectFields(fields, new HashMap<>());
+        return this;
     }
 
     private Map<String, Object> selectFields(final List<String> fields,
