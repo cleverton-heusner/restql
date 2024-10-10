@@ -1,4 +1,4 @@
-# Index
+## Index
 - [RestQl](#restql)
 - [Adjustments and Improvements](#adjustments-and-improvements)
 - [Prerequisites](#prerequisites)
