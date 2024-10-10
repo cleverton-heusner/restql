@@ -1,5 +1,6 @@
 package io.github.cleverton.heusner.query;
 
+import io.github.cleverton.heusner.exception.FieldNotFoundException;
 import io.github.cleverton.heusner.serialization.SerializationAnnotation;
 import io.github.cleverton.heusner.serialization.SerializationAnnotationSelector;
 import io.github.cleverton.heusner.utils.MapsMerger;
@@ -108,7 +109,7 @@ public class RestQlQuery {
                         fieldMetadata.setAccessible(true);
                         return fieldMetadata;
                     } catch (final NoSuchFieldException e) {
-                        throw new IllegalArgumentException("Field '" + subFields.getFirst() + "' not found.");
+                        throw new FieldNotFoundException("Field '" + subFields.getFirst() + "' not found.");
                     }
                 });
     }

@@ -1,5 +1,6 @@
 package io.github.cleverton.heusner.query;
 
+import io.github.cleverton.heusner.exception.FieldNotFoundException;
 import io.github.cleverton.heusner.fixture.Comment;
 import io.github.cleverton.heusner.fixture.Post;
 import org.instancio.Instancio;
@@ -585,7 +586,7 @@ public class RestQlQueryTest extends FieldsSelectorTestConfiguration  {
     void when_nonExistingFieldsSelected_then_illegalArgumentExceptionReturned() {
 
         // Act
-        final var illegalArgumentException = assertThrows(IllegalArgumentException.class, () -> {
+        final var fieldNotFoundException = assertThrows(FieldNotFoundException.class, () -> {
             restQlQuery.select(
                     NON_EXISTING_FIELD_1,
                     NON_EXISTING_FIELD_2,
@@ -594,14 +595,14 @@ public class RestQlQueryTest extends FieldsSelectorTestConfiguration  {
         });
 
         // Assert
-        assertThat(illegalArgumentException.getMessage()).isEqualTo(getFieldNotFoundMessage());
+        assertThat(fieldNotFoundException.getMessage()).isEqualTo(getFieldNotFoundMessage());
     }
 
     @Test
     void when_nonExistingSubfieldsSelected_then_illegalArgumentExceptionReturned() {
 
         // Act
-        final var illegalArgumentException = assertThrows(IllegalArgumentException.class, () -> {
+        final var fieldNotFoundException = assertThrows(FieldNotFoundException.class, () -> {
             restQlQuery.select(
                     AUTHOR_DOT_NON_EXISTING_FIELD_1,
                     AUTHOR_DOT_NON_EXISTING_FIELD_2
@@ -609,6 +610,6 @@ public class RestQlQueryTest extends FieldsSelectorTestConfiguration  {
         });
 
         // Assert
-        assertThat(illegalArgumentException.getMessage()).isEqualTo(getFieldNotFoundMessage());
+        assertThat(fieldNotFoundException.getMessage()).isEqualTo(getFieldNotFoundMessage());
     }
 }
