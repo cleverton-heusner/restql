@@ -1,6 +1,7 @@
 package io.github.cleverton.heusner.query;
 
 import io.github.cleverton.heusner.exception.FieldNotFoundException;
+import io.github.cleverton.heusner.exception.NoFieldsInformedException;
 import io.github.cleverton.heusner.fixture.Comment;
 import io.github.cleverton.heusner.fixture.Post;
 import org.instancio.Instancio;
@@ -8,15 +9,13 @@ import org.instancio.Select;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class RestQlQueryTest extends FieldsSelectorTestConfiguration  {
+public class RestQlQueryTestTest extends RestQlQueryTestConfiguration {
 
     private RestQlQuery restQlQuery;
     private Post post;
@@ -583,33 +582,141 @@ public class RestQlQueryTest extends FieldsSelectorTestConfiguration  {
     }
 
     @Test
-    void when_nonExistingFieldsSelected_then_illegalArgumentExceptionReturned() {
+    void when_nonExistingFieldsSelected_then_fieldNotFoundExceptionReturned() {
 
         // Act
-        final var fieldNotFoundException = assertThrows(FieldNotFoundException.class, () -> {
+        final var fieldNotFoundException = assertThrows(FieldNotFoundException.class, () ->
             restQlQuery.select(
                     NON_EXISTING_FIELD_1,
                     NON_EXISTING_FIELD_2,
                     NON_EXISTING_FIELD_3
-            ).from(post);
-        });
+            ).from(post)
+        );
 
         // Assert
         assertThat(fieldNotFoundException.getMessage()).isEqualTo(getFieldNotFoundMessage());
     }
 
     @Test
-    void when_nonExistingSubfieldsSelected_then_illegalArgumentExceptionReturned() {
+    void when_nonExistingSubfieldsSelected_then_fieldNotFoundExceptionReturned() {
 
         // Act
-        final var fieldNotFoundException = assertThrows(FieldNotFoundException.class, () -> {
+        final var fieldNotFoundException = assertThrows(FieldNotFoundException.class, () ->
             restQlQuery.select(
                     AUTHOR_DOT_NON_EXISTING_FIELD_1,
                     AUTHOR_DOT_NON_EXISTING_FIELD_2
-            ).from(post);
-        });
+            ).from(post)
+        );
 
         // Assert
         assertThat(fieldNotFoundException.getMessage()).isEqualTo(getFieldNotFoundMessage());
+    }
+
+    @Test
+    void when_noFieldsInformed_and_methodArgumentIsArgs_then_noFieldsInformedExceptionReturned() {
+
+        // Act
+        final var noFieldsInformedException = assertThrows(NoFieldsInformedException.class, () ->
+                restQlQuery.select().from(post)
+        );
+
+        // Assert
+        assertThat(noFieldsInformedException.getMessage()).isEqualTo("You must inform at least one field.");
+    }
+
+    @Test
+    void when_fieldsInformedAsBlankSpace_and_methodArgumentIsArgs_then_noFieldsInformedExceptionReturned() {
+
+        // Act
+        final var noFieldsInformedException = assertThrows(NoFieldsInformedException.class, () ->
+                restQlQuery.select("").from(post)
+        );
+
+        // Assert
+        assertThat(noFieldsInformedException.getMessage()).isEqualTo("You must inform at least one field.");
+    }
+
+    @Test
+    void when_fieldsInformedAsMultipleBlankSpaces_and_methodArgumentIsArgs_then_noFieldsInformedExceptionReturned() {
+
+        // Act
+        final var noFieldsInformedException = assertThrows(NoFieldsInformedException.class, () ->
+                restQlQuery.select("", "", "  ", "  ").from(post)
+        );
+
+        // Assert
+        assertThat(noFieldsInformedException.getMessage()).isEqualTo("You must inform at least one field.");
+    }
+
+    @Test
+    void when_fieldsInformedAsNullValues_and_methodArgumentIsArgs_then_noFieldsInformedExceptionReturned() {
+
+        // Act
+        final var noFieldsInformedException = assertThrows(NoFieldsInformedException.class, () ->
+                restQlQuery.select(null, null).from(post)
+        );
+
+        // Assert
+        assertThat(noFieldsInformedException.getMessage()).isEqualTo("You must inform at least one field.");
+    }
+
+    @Test
+    void when_fieldsInformedAsEmptyList_and_methodArgumentIsList_then_noFieldsInformedExceptionReturned() {
+
+        // Act
+        final var noFieldsInformedException = assertThrows(NoFieldsInformedException.class, () ->
+                restQlQuery.select(Collections.emptyList()).from(post)
+        );
+
+        // Assert
+        assertThat(noFieldsInformedException.getMessage()).isEqualTo("You must inform at least one field.");
+    }
+
+    @Test
+    void when_fieldsInformedAsMultipleBlankSpaces_and_methodArgumentIsList_then_noFieldsInformedExceptionReturned() {
+
+        // Act
+        final var noFieldsInformedException = assertThrows(NoFieldsInformedException.class, () ->
+                restQlQuery.select(Arrays.asList("", "", "  ", "  ")).from(post)
+        );
+
+        // Assert
+        assertThat(noFieldsInformedException.getMessage()).isEqualTo("You must inform at least one field.");
+    }
+
+    @Test
+    void when_fieldsInformedAsNullValues_and_methodArgumentIsList_then_noFieldsInformedExceptionReturned() {
+
+        // Act
+        final var noFieldsInformedException = assertThrows(NoFieldsInformedException.class, () ->
+                restQlQuery.select(Arrays.asList(null, null)).from(post)
+        );
+
+        // Assert
+        assertThat(noFieldsInformedException.getMessage()).isEqualTo("You must inform at least one field.");
+    }
+
+    @Test
+    void when_fieldsInformedAsBlankSpace_and_methodArgumentIsString_then_noFieldsInformedExceptionReturned() {
+
+        // Act
+        final var noFieldsInformedException = assertThrows(NoFieldsInformedException.class, () ->
+                restQlQuery.select("").from(post)
+        );
+
+        // Assert
+        assertThat(noFieldsInformedException.getMessage()).isEqualTo("You must inform at least one field.");
+    }
+
+    @Test
+    void when_fieldsInformedAsMultipleBlankSpaces_and_methodArgumentIsString_then_noFieldsInformedExceptionReturned() {
+
+        // Act
+        final var noFieldsInformedException = assertThrows(NoFieldsInformedException.class, () ->
+                restQlQuery.select("  ").from(post)
+        );
+
+        // Assert
+        assertThat(noFieldsInformedException.getMessage()).isEqualTo("You must inform at least one field.");
     }
 }

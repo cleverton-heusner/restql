@@ -1,12 +1,15 @@
 package io.github.cleverton.heusner.query;
 
 import io.github.cleverton.heusner.exception.FieldNotFoundException;
+import io.github.cleverton.heusner.exception.NoFieldsInformedException;
 import io.github.cleverton.heusner.serialization.SerializationAnnotation;
 import io.github.cleverton.heusner.serialization.SerializationAnnotationSelector;
 import io.github.cleverton.heusner.utils.MapsMerger;
 
 import java.lang.reflect.Field;
 import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 public class RestQlQuery {
 
@@ -23,20 +26,34 @@ public class RestQlQuery {
     }
 
     public RestQlQuery select(final String...fields) {
-        this.fields = Arrays.asList(fields);
+        this.fields = removeBlankFields(Arrays.stream(fields));
+        validateFields();
         return this;
     }
 
     public RestQlQuery select(final List<String> fields) {
-        this.fields = fields;
+        this.fields = removeBlankFields(fields.stream());
+        validateFields();
         return this;
     }
 
     public RestQlQuery select(final String fieldsSeparatedByComma) {
-        fields = Arrays.stream(fieldsSeparatedByComma.split(COMMA))
-                .map(String::trim)
-                .toList();
+        fields = removeBlankFields(Arrays.stream(fieldsSeparatedByComma.split(COMMA)));
+        validateFields();
         return this;
+    }
+
+    private List<String> removeBlankFields(final Stream<String> fields) {
+        return fields.filter(Objects::nonNull)
+                .map(String::trim)
+                .filter(Predicate.not(String::isEmpty))
+                .toList();
+    }
+
+    private void validateFields() {
+        if (fields.isEmpty()) {
+            throw new NoFieldsInformedException("You must inform at least one field.");
+        }
     }
 
     private Map<String, Object> selectFields(final List<String> fields,

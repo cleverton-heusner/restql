@@ -1,6 +1,6 @@
 package io.github.cleverton.heusner.query;
 
-public class FieldsSelectorTestConfiguration {
+public class RestQlQueryTestConfiguration {
 
     protected static final String COMMA = ",";
     protected static final String DOT = ".";
