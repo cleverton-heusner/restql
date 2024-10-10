@@ -94,7 +94,7 @@ http://localhost:8080/post?fields=id,text,author.id,author.email,author.pet.age,
         // Getters e Setters omitidos para brevidade
     }
 ```
-3. Configure the serialization to read the ```@RestQl``` annotation. This configuration exemplifies it using **Jackson**:
+3. Configure the serialization to read the ```@RestQl``` annotation. This configuration exemplifies it using the library **Jackson**:
 ```java
 @Configuration
 public class ObjectMapperConfiguration {
