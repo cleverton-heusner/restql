@@ -1,4 +1,4 @@
-package io.github.cleverton.heusner.selector;
+package io.github.cleverton.heusner.query;
 
 import io.github.cleverton.heusner.fixture.Comment;
 import io.github.cleverton.heusner.fixture.Post;
@@ -80,7 +80,7 @@ public class RestQlQueryTest extends FieldsSelectorTestConfiguration  {
         final var expectedSelectedFields = Map.of(AUTHOR, authorId);
 
         // Act
-        final var actualSelectedFields = restQlQuery.select("author.id").from(post);
+        final var actualSelectedFields = restQlQuery.select(AUTHOR_DOT_ID).from(post);
 
         // Assert
         assertThat(actualSelectedFields).containsExactlyInAnyOrderEntriesOf(expectedSelectedFields);
@@ -94,7 +94,7 @@ public class RestQlQueryTest extends FieldsSelectorTestConfiguration  {
         final var expectedSelectedFields = Map.of(AUTHOR, author);
 
         // Act
-        final var actualSelectedFields = restQlQuery.select("author.id", "author.email").from(post);
+        final var actualSelectedFields = restQlQuery.select(AUTHOR_DOT_ID, AUTHOR_DOT_EMAIL).from(post);
 
         // Assert
         assertThat(actualSelectedFields).containsExactlyInAnyOrderEntriesOf(expectedSelectedFields);
@@ -108,7 +108,7 @@ public class RestQlQueryTest extends FieldsSelectorTestConfiguration  {
         final var expectedSelectedFields = Map.of(AUTHOR, Map.of(PET, authorAge));
 
         // Act
-        final var actualSelectedFields = restQlQuery.select("author.pet.age").from(post);
+        final var actualSelectedFields = restQlQuery.select(AUTHOR_DOT_PET_DOT_AGE).from(post);
 
         // Assert
         assertThat(actualSelectedFields).containsExactlyInAnyOrderEntriesOf(expectedSelectedFields);
@@ -124,8 +124,8 @@ public class RestQlQueryTest extends FieldsSelectorTestConfiguration  {
 
         // Act
         final var actualSelectedFields = restQlQuery.select(
-                "author.pet.age",
-                "author.pet.name"
+                AUTHOR_DOT_PET_DOT_AGE,
+                AUTHOR_DOT_PET_DOT_NAME
         ).from(post);
 
         // Assert
@@ -142,7 +142,7 @@ public class RestQlQueryTest extends FieldsSelectorTestConfiguration  {
         );
 
         // Act
-        final var actualSelectedFields = restQlQuery.select(ID, "author.id").from(post);
+        final var actualSelectedFields = restQlQuery.select(ID, AUTHOR_DOT_ID).from(post);
 
         // Assert
         assertThat(actualSelectedFields).containsExactlyInAnyOrderEntriesOf(expectedSelectedFields);
@@ -171,10 +171,10 @@ public class RestQlQueryTest extends FieldsSelectorTestConfiguration  {
         final var actualSelectedFields = restQlQuery.select(
                 ID,
                 TEXT,
-                "author.id",
-                "author.email",
-                "author.pet.age",
-                "author.pet.name"
+                AUTHOR_DOT_ID,
+                AUTHOR_DOT_EMAIL,
+                AUTHOR_DOT_PET_DOT_AGE,
+                AUTHOR_DOT_PET_DOT_NAME
         ).from(post);
 
         // Assert
@@ -205,10 +205,10 @@ public class RestQlQueryTest extends FieldsSelectorTestConfiguration  {
                 List.of(
                         ID,
                         TEXT,
-                        "author.id",
-                        "author.email",
-                        "author.pet.age",
-                        "author.pet.name"
+                        AUTHOR_DOT_ID,
+                        AUTHOR_DOT_EMAIL,
+                        AUTHOR_DOT_PET_DOT_AGE,
+                        AUTHOR_DOT_PET_DOT_NAME
                 )
         ).from(post);
 
@@ -237,7 +237,12 @@ public class RestQlQueryTest extends FieldsSelectorTestConfiguration  {
 
         // Act
         final var actualSelectedFields = restQlQuery.select(
-                "id,text,author.id,author.email,author.pet.age,author.pet.name"
+                ID + COMMA +
+                        TEXT + COMMA +
+                        AUTHOR_DOT_ID + COMMA +
+                        AUTHOR_DOT_EMAIL + COMMA +
+                        AUTHOR_DOT_PET_DOT_AGE + COMMA +
+                        AUTHOR_DOT_PET_DOT_NAME
         ).from(post);
 
         // Assert
@@ -335,11 +340,11 @@ public class RestQlQueryTest extends FieldsSelectorTestConfiguration  {
     void when_oneChildFieldOfSetTypeSelected_then_fieldReturned() {
 
         // Arrange
-        final var authorBooks = Map.of("books", post.getAuthor().getBooks());
-        final var expectedSelectedPostFields = Map.of("author", authorBooks);
+        final var authorBooks = Map.of(BOOKS, post.getAuthor().getBooks());
+        final var expectedSelectedPostFields = Map.of(AUTHOR, authorBooks);
 
         // Act
-        final var actualSelectedFields = restQlQuery.select("author.books").from(post);
+        final var actualSelectedFields = restQlQuery.select(AUTHOR_DOT_BOOKS).from(post);
 
         // Assert
         assertThat(actualSelectedFields).containsExactlyInAnyOrderEntriesOf(expectedSelectedPostFields);
@@ -353,7 +358,7 @@ public class RestQlQueryTest extends FieldsSelectorTestConfiguration  {
         final var expectedSelectedPostFields = Map.of(AUTHOR, expectedSelectedAuthorPhoneNumbersFields);
 
         // Act
-        final var actualSelectedFields = restQlQuery.select("author.phoneNumbers").from(post);
+        final var actualSelectedFields = restQlQuery.select(AUTHOR_DOT_PHONE_NUMBERS).from(post);
 
         // Assert
         assertThat(actualSelectedFields).containsExactlyInAnyOrderEntriesOf(expectedSelectedPostFields);
@@ -369,7 +374,7 @@ public class RestQlQueryTest extends FieldsSelectorTestConfiguration  {
         final var expectedSelectedPostFields = Map.of(COMMENTS, commentsIds);
 
         // Act
-        final var actualSelectedFields = restQlQuery.select("comments.id").from(post);
+        final var actualSelectedFields = restQlQuery.select(COMMENTS_DOT_ID).from(post);
 
         // Assert
         assertThat(actualSelectedFields).containsExactlyInAnyOrderEntriesOf(expectedSelectedPostFields);
@@ -385,7 +390,7 @@ public class RestQlQueryTest extends FieldsSelectorTestConfiguration  {
         final var expectedSelectedPostFields = Map.of(COMMENTS, comments);
 
         // Act
-        final var actualSelectedFields = restQlQuery.select("comments.id", "comments.text").from(post);
+        final var actualSelectedFields = restQlQuery.select(COMMENTS_DOT_ID, COMMENTS_DOT_TEXT).from(post);
 
         // Assert
         assertThat(actualSelectedFields).containsExactlyInAnyOrderEntriesOf(expectedSelectedPostFields);
@@ -406,7 +411,7 @@ public class RestQlQueryTest extends FieldsSelectorTestConfiguration  {
         final var expectedSelectedPostFields = Map.of(COMMENTS, comments);
 
         // Act
-        final var actualSelectedFields = restQlQuery.select("comments.author.id").from(post);
+        final var actualSelectedFields = restQlQuery.select(COMMENTS_DOT_AUTHOR_DOT_ID).from(post);
 
         // Assert
         assertThat(actualSelectedFields).containsExactlyInAnyOrderEntriesOf(expectedSelectedPostFields);
@@ -430,8 +435,8 @@ public class RestQlQueryTest extends FieldsSelectorTestConfiguration  {
 
         // Act
         final var actualSelectedFields = restQlQuery.select(
-                "comments.author.id",
-                "comments.author.name"
+                COMMENTS_DOT_AUTHOR_DOT_ID,
+                COMMENTS_DOT_AUTHOR_DOT_NAME
         ).from(post);
 
         // Assert
@@ -458,10 +463,10 @@ public class RestQlQueryTest extends FieldsSelectorTestConfiguration  {
 
         // Act
         final var actualSelectedFields = restQlQuery.select(
-                "comments.id",
-                "comments.text",
-                "comments.author.id",
-                "comments.author.name"
+                COMMENTS_DOT_ID,
+                COMMENTS_DOT_TEXT,
+                COMMENTS_DOT_AUTHOR_DOT_ID,
+                COMMENTS_DOT_AUTHOR_DOT_NAME
         ).from(post);
 
         // Assert
@@ -473,7 +478,7 @@ public class RestQlQueryTest extends FieldsSelectorTestConfiguration  {
     void when_nestedLists_then_fieldsReturned() {
 
         // Act
-        final var actualSelectedFields = restQlQuery.select("comments.replies").from(post);
+        final var actualSelectedFields = restQlQuery.select(COMMENTS_DOT_REPLIES).from(post);
 
         // Assert
         final List<?> actualComments = (List<?>) actualSelectedFields.get(COMMENTS);
@@ -507,8 +512,8 @@ public class RestQlQueryTest extends FieldsSelectorTestConfiguration  {
 
         // Act
         final var actualSelectedFields = restQlQuery.select(
-                "comments.replies.id",
-                        "comments.replies.text"
+                COMMENTS_DOT_REPLIES_DOT_ID,
+                COMMENTS_DOT_REPLIES_DOT_TEXT
                 ).from(post);
 
         // Assert
@@ -556,7 +561,7 @@ public class RestQlQueryTest extends FieldsSelectorTestConfiguration  {
         final var expectedSelectedFields = Map.of(AUTHOR, authorNickName);
 
         // Act
-        final var actualSelectedFields = restQlQuery.select("author.nick_name").from(post);
+        final var actualSelectedFields = restQlQuery.select(AUTHOR_DOT_NICK_NAME).from(post);
 
         // Assert
         assertThat(actualSelectedFields).containsExactlyInAnyOrderEntriesOf(expectedSelectedFields);
@@ -570,7 +575,7 @@ public class RestQlQueryTest extends FieldsSelectorTestConfiguration  {
         final var expectedSelectedFields = Map.of(AUTHOR, Map.of(PET, petNickName));
 
         // Act
-        final var actualSelectedFields = restQlQuery.select("author.pet.nick_name").from(post);
+        final var actualSelectedFields = restQlQuery.select(AUTHOR_DOT_PET_DOT_NICK_NAME).from(post);
 
         // Assert
         assertThat(actualSelectedFields).containsExactlyInAnyOrderEntriesOf(expectedSelectedFields);
@@ -582,14 +587,14 @@ public class RestQlQueryTest extends FieldsSelectorTestConfiguration  {
         // Act
         final var illegalArgumentException = assertThrows(IllegalArgumentException.class, () -> {
             restQlQuery.select(
-                    "nonExistingField1",
-                    "nonExistingField2",
-                    "nonExistingField2"
+                    NON_EXISTING_FIELD_1,
+                    NON_EXISTING_FIELD_2,
+                    NON_EXISTING_FIELD_3
             ).from(post);
         });
 
         // Assert
-        assertThat(illegalArgumentException.getMessage()).isEqualTo("Field 'nonExistingField1' not found.");
+        assertThat(illegalArgumentException.getMessage()).isEqualTo(getFieldNotFoundMessage());
     }
 
     @Test
@@ -598,12 +603,12 @@ public class RestQlQueryTest extends FieldsSelectorTestConfiguration  {
         // Act
         final var illegalArgumentException = assertThrows(IllegalArgumentException.class, () -> {
             restQlQuery.select(
-                    "author.nonExistingField1",
-                    "author.nonExistingField2"
+                    AUTHOR_DOT_NON_EXISTING_FIELD_1,
+                    AUTHOR_DOT_NON_EXISTING_FIELD_2
             ).from(post);
         });
 
         // Assert
-        assertThat(illegalArgumentException.getMessage()).isEqualTo("Field 'nonExistingField1' not found.");
+        assertThat(illegalArgumentException.getMessage()).isEqualTo(getFieldNotFoundMessage());
     }
 }

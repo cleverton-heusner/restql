@@ -1,4 +1,4 @@
-package io.github.cleverton.heusner.selector;
+package io.github.cleverton.heusner.query;
 
 import io.github.cleverton.heusner.serialization.SerializationAnnotation;
 import io.github.cleverton.heusner.serialization.SerializationAnnotationSelector;
