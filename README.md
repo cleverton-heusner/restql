@@ -90,8 +90,8 @@ http://localhost:8080/post?fields=id,text,author.id,author.email,author.pet.age,
         private String text;
         private Author author;
         private List<Comment> comments = new ArrayList<>();
-        
-        // Getters e Setters omitidos para brevidade
+
+        // Getters and Setters omitted for brevity
     }
 ```
 3. Configure the serialization to read the ```@RestQl``` annotation. This configuration exemplifies it using the library **Jackson**:
