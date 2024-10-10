@@ -1,5 +1,6 @@
 package io.github.cleverton.heusner.query;
 
+import io.github.cleverton.heusner.exception.EntityNotInformedException;
 import io.github.cleverton.heusner.exception.FieldNotFoundException;
 import io.github.cleverton.heusner.exception.NoFieldsInformedException;
 import io.github.cleverton.heusner.fixture.Comment;
@@ -718,5 +719,16 @@ public class RestQlQueryTestTest extends RestQlQueryTestConfiguration {
 
         // Assert
         assertThat(noFieldsInformedException.getMessage()).isEqualTo("You must inform at least one field.");
+    }
+
+    @Test
+    void when_entityInformedAsNull_then_entityNotInformedExceptionReturned() {
+        // Act
+        final var entityNotInformedException = assertThrows(EntityNotInformedException.class, () ->
+                restQlQuery.select(ID).from(null)
+        );
+
+        // Assert
+        assertThat(entityNotInformedException.getMessage()).isEqualTo("Entity not informed.");
     }
 }

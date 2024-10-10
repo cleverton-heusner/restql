@@ -1,5 +1,6 @@
 package io.github.cleverton.heusner.query;
 
+import io.github.cleverton.heusner.exception.EntityNotInformedException;
 import io.github.cleverton.heusner.exception.FieldNotFoundException;
 import io.github.cleverton.heusner.exception.NoFieldsInformedException;
 import io.github.cleverton.heusner.serialization.SerializationAnnotation;
@@ -22,6 +23,11 @@ public class RestQlQuery {
 
     public Map<String, Object> from(final Object entity) {
         this.rootField = entity;
+
+        if (rootField == null) {
+           throw new EntityNotInformedException("Entity not informed.");
+        }
+
         return selectFields(fields, new HashMap<>());
     }
 
